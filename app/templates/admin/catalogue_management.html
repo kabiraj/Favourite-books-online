@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-title">
+    <h2>Manage Books</h2>
+    <a class="btn" href="/admin/add-book">⊕ Add Book</a>
+</div>
+
+<table>
+    <tr>
+        <th>Title</th>
+        <th>Author</th>
+        <th>ISBN</th>
+        <th>Genre</th>
+        <th>Price</th>
+        <th>Stock</th>
+        <th>Actions</th>
+    </tr>
+
+    {% for book in books %}
+    <tr>
+        <td>{{ book.title }}</td>
+        <td>{{ book.author }}</td>
+        <td class="isbn">{{ book.isbn }}</td>
+        <td>{{ book.genre }}</td>
+        <td>${{ book.price }}</td>
+        <td><span class="stock">{{ book.stock }}</span></td>
+        <td>
+            <a class="edit-btn" href="/admin/edit-book/{{ loop.index0 }}">Edit</a>
+            <a class="delete-btn" href="/admin/delete-book/{{ loop.index0 }}">Delete</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
