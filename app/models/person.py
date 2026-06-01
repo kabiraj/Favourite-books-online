@@ -1,14 +1,16 @@
 import bcrypt
 
 class Person:
-    def __init__(self, name, email, password):
+    def __init__(self, name, email, password, is_hashed=False):
         self.id = None
         self.name = name
         self.email = email
         self.password = None
-        self.hash_password(password)
+        if is_hashed:
+            self.password = password
+        else:
+            self.hash_password(password)
 
-    "Hash password"
     def hash_password(self, password):
         self.password = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
 
