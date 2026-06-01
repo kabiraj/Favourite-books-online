@@ -1,7 +1,16 @@
-class Admin:
-    def __init__(self, username, password):
-        self.username = username
-        self.password = password
+from app.models.person import Person
+class Admin(Person):
+    def __init__(self, name, email, password, is_hashed=False):
+        super().__init__(name, email, password, is_hashed)
+
+    def add_book(self):
+        pass
+
+    def edit_book(self):
+        pass
+
+    def remove_book(self):
+        pass
 
     @staticmethod
     def login(username, password):
