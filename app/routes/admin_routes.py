@@ -1,3 +1,4 @@
+from app.models.book import Book
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
 from app.models.admin import Admin
 
@@ -43,16 +44,15 @@ def add_book():
         return redirect(url_for("admin.login"))
 
     if request.method == "POST":
-        book = {
-            "title": request.form.get("title"),
-            "author": request.form.get("author"),
-            "isbn": request.form.get("isbn"),
-            "genre": request.form.get("genre"),
-            "price": request.form.get("price"),
-            "stock": request.form.get("stock"),
-            "image_url": request.form.get("image_url"),
-            "description": request.form.get("description")
-        }
+        
+        book = Book(
+            title=request.form.get("title"),
+            author=request.form.get("author"),
+            isbn=request.form.get("isbn"),
+            price=request.form.get("price"),
+            stock=request.form.get("stock"),
+            genre=request.form.get("genre")
+        )
 
         books.append(book)
         return redirect(url_for("admin.catalogue"))
@@ -69,14 +69,12 @@ def edit_book(index):
         return redirect(url_for("admin.catalogue"))
 
     if request.method == "POST":
-        books[index]["title"] = request.form.get("title")
-        books[index]["author"] = request.form.get("author")
-        books[index]["isbn"] = request.form.get("isbn")
-        books[index]["genre"] = request.form.get("genre")
-        books[index]["price"] = request.form.get("price")
-        books[index]["stock"] = request.form.get("stock")
-        books[index]["image_url"] = request.form.get("image_url")
-        books[index]["description"] = request.form.get("description")
+        books[index].title = request.form.get("title")
+        books[index].author = request.form.get("author")
+        books[index].isbn = request.form.get("isbn")
+        books[index].price = request.form.get("price")
+        books[index].stock = request.form.get("stock")
+        books[index].genre = request.form.get("genre")
 
         return redirect(url_for("admin.catalogue"))
 
