@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}Favourite Books Online{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v={{ range(1, 99999) | random }}">
+</head>
+<body class="{% block body_class %}{% endblock %}">
+
+{% block navbar %}
+{% include 'partials/navbar_admin.html' %}
+{% endblock %}
+
+{% block page_wrapper %}
+    <div class="{% block container_class %}container{% endblock %}">
+        {% include 'partials/flash_messages.html' %}
+        {% block content %}
+        {% endblock %}
+    </div>
+{% endblock %}
+
+{% block footer %}{% endblock %}
+
+</body>
+</html>

@@ -1,0 +1,74 @@
+{% extends 'customer_base.html' %}
+
+{% block container_class %}container container-wide{% endblock %}
+
+{% block content %}
+<div class="browse-header">
+    <h2>Books</h2>
+    <p>Search by title, author, or ISBN.</p>
+</div>
+
+<form class="search-form" method="GET" action="{{ url_for('catalogue.browse') }}">
+    <input
+        type="search"
+        name="q"
+        placeholder="Search books…"
+        value="{{ search_query }}"
+        aria-label="Search books"
+    >
+    <button class="submit-btn" type="submit">Search</button>
+    {% if search_query %}
+        <a class="btn-link" href="{{ url_for('catalogue.browse') }}">Clear</a>
+    {% endif %}
+</form>
+
+{% if books %}
+    <div class="book-grid">
+        {% for book in books %}
+            <article class="book-card">
+                <div class="book-cover-wrap">
+                    {% if book.image_url %}
+                        <img class="book-cover" src="{{ book.image_url }}" alt="Cover of {{ book.title }}">
+                    {% else %}
+                        <div class="book-cover book-cover-placeholder" aria-hidden="true">No cover</div>
+                    {% endif %}
+                </div>
+                <div class="book-card-body">
+                    <h3>{{ book.title }}</h3>
+                    <p class="book-meta">by {{ book.author }}{% if book.genre %} | {{ book.genre }}{% endif %}</p>
+                    <p class="book-price">${{ '%.2f'|format(book.price) }}</p>
+                    <p class="book-stock">
+                        {% if book.stock > 0 %}
+                            In stock ({{ book.stock }})
+                        {% else %}
+                            Out of stock
+                        {% endif %}
+                    </p>
+                    {# Lasith: implement POST /cart/add in customer_routes #}
+                    <form method="POST" action="/cart/add" class="book-add-form">
+                        <input type="hidden" name="isbn" value="{{ book.isbn }}">
+                        <button
+                            class="submit-btn full-width"
+                            type="submit"
+                            {% if book.stock < 1 %}disabled{% endif %}
+                        >
+                            Add to cart
+                        </button>
+                    </form>
+                </div>
+            </article>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="card">
+        <p>
+            No books found.
+            {% if search_query %}
+                Try a different search.
+            {% else %}
+                Ask admin to add books to the catalogue.
+            {% endif %}
+        </p>
+    </div>
+{% endif %}
+{% endblock %}

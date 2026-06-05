@@ -1,0 +1,16 @@
+# Virtual environment
+venv/
+
+# Environment variables (contains MongoDB password)
+.env
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# VS Code settings
+.vscode/
+
+# Mac system files
+.DS_Store

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2 class="page-heading">🎛️ Admin Dashboard</h2>
+
+<div class="dashboard-cards">
+
+    <div class="dashboard-box blue">
+        <h3>Total Books</h3>
+        <p>{{ books_count }}</p>
+        <a href="/admin/catalogue">Manage Catalogue →</a>
+    </div>
+
+    <div class="dashboard-box green">
+        <h3>Total Orders</h3>
+        <p>0</p>
+        <a href="/admin/orders">View Orders →</a>
+    </div>
+
+    <div class="dashboard-box yellow">
+        <h3>Pending Shipments</h3>
+        <p>0</p>
+        <a href="/admin/shipments">Manage Shipments →</a>
+    </div>
+
+</div>
+
+<div class="admin-menu">
+    <a href="/admin/catalogue">📖 Manage Book Catalogue</a>
+    <a href="/admin/orders">🛍️ View All Orders</a>
+    <a href="/admin/shipments">🚚 Manage Shipments</a>
+    <a href="/admin/sales-report">📊 Sales Report</a>
+</div>
+
+{% endblock %}
