@@ -1,0 +1,21 @@
+<div class="navbar navbar-customer">
+    <div class="nav-inner">
+        <h1>
+            <a class="navbar-brand" href="{{ url_for('home') }}" title="Favourite Books Online">
+                <img class="navbar-logo" src="{{ url_for('static', filename='images/logo.png') }}" alt="Favourite Books logo">
+            </a>
+        </h1>
+        <nav class="nav-links" aria-label="Customer navigation">
+            {% if session.get('customer_logged_in') %}
+                <a href="{{ url_for('catalogue.browse') }}">Books</a>
+                <a href="/cart">Cart</a>
+                <a href="/orders">My Orders</a>
+                <a href="{{ url_for('auth.logout') }}">Logout</a>
+            {% else %}
+                <a href="{{ url_for('home') }}">Home</a>
+                <a href="{{ url_for('auth.login') }}">Login</a>
+                <a href="{{ url_for('auth.register') }}">Register</a>
+            {% endif %}
+        </nav>
+    </div>
+</div>

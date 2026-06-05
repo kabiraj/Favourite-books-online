@@ -1,24 +1,49 @@
 {% extends 'base.html' %}
 
-{% block content %}
-<div class="login-wrapper">
-    <div class="login-card">
-        <h2>Admin Login</h2>
-        <p>Access the bookstore management dashboard.</p>
+{% block body_class %}auth-page{% endblock %}
+{% block navbar %}{% endblock %}
 
-        <form method="POST">
-            <div class="form-group">
-                <label>Username</label>
-                <input type="text" name="username" placeholder="Enter admin username" required>
-            </div>
+{% block page_wrapper %}
+<section class="admin-login-page">
+    {% include 'partials/flash_messages.html' %}
+    <div class="login-wrapper">
+        <div class="login-card">
+            <a class="login-brand" href="{{ url_for('home') }}" title="Favourite Books Online">
+                <img class="navbar-logo" src="{{ url_for('static', filename='images/logo.png') }}" alt="Favourite Books logo">
+            </a>
+            <h2>Admin Login</h2>
+            <p>Sign in to manage the bookstore catalogue.</p>
 
-            <div class="form-group">
-                <label>Password</label>
-                <input type="password" name="password" placeholder="Enter password" required>
-            </div>
+            <form method="POST" action="{{ url_for('admin.login') }}">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        placeholder="Enter admin username"
+                        required
+                    >
+                </div>
 
-            <button class="submit-btn full-width" type="submit">Login</button>
-        </form>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Enter password"
+                        required
+                    >
+                </div>
+
+                <button class="submit-btn full-width" type="submit">Login</button>
+            </form>
+
+            <p class="login-footer">
+                <a href="{{ url_for('home') }}">Back to store</a>
+            </p>
+        </div>
     </div>
-</div>
+</section>
 {% endblock %}

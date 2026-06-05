@@ -23,3 +23,5 @@ class Customer(Person):
             is_hashed = True,
             id = data["_id"]
         )
+        return customer
+

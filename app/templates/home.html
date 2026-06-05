@@ -1,0 +1,53 @@
+{% extends 'customer_base.html' %}
+
+{% block page_wrapper %}
+<section class="home-page">
+    {% include 'partials/flash_messages.html' %}
+
+    <header class="home-hero">
+        <div class="home-hero-overlay"></div>
+        <div class="home-hero-content">
+            <h1>Favourite Books Online</h1>
+            <p class="home-lead">
+                Now delivering books all over Australia
+            </p>
+            <div class="home-hero-actions">
+                {% if customer_logged_in %}
+                    <a class="submit-btn" href="{{ url_for('catalogue.browse') }}">Browse books</a>
+                    <a class="btn-outline" href="{{ url_for('auth.logout') }}">Logout</a>
+                {% else %}
+                    <a class="submit-btn" href="{{ url_for('auth.register') }}">Create account</a>
+                    <a class="btn-outline" href="{{ url_for('auth.login') }}">Login</a>
+                    <a class="btn-outline" href="{{ url_for('catalogue.browse') }}">Browse books</a>
+                {% endif %}
+            </div>
+            {% if customer_logged_in %}
+                <p class="home-welcome">Welcome back, {{ customer_name }}.</p>
+            {% endif %}
+        </div>
+    </header>
+
+    <div class="container container-wide">
+        <section class="home-story">
+            <div class="home-story-text">
+                <h2>Our story</h2>
+                <p>
+                    Favourite Books has been a welcoming stop on Glenferrie Road for readers
+                    who love to discover something new. Until now, most of our customers came
+                    from surrounding suburbs.
+                </p>
+                <p>
+                    With more people shopping online, we are growing beyond the shop floor —
+                    same curated catalogue, delivered to homes across the country.
+                </p>
+            </div>
+            <div class="home-story-image">
+                <img
+                    src="{{ url_for('static', filename='images/store.jpg') }}"
+                    alt="Favourite Books storefront on Glenferrie Road"
+                >
+            </div>
+        </section>
+    </div>
+</section>
+{% endblock %}

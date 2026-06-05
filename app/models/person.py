@@ -15,6 +15,9 @@ class Person:
         self.password = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
 
     def check_password(self, password):
-        return bcrypt.checkpw(password.encode(), self.password)
+        stored = self.password
+        if isinstance(stored, str):
+            stored = stored.encode("utf-8")
+        return bcrypt.checkpw(password.encode(), stored)
     
 
