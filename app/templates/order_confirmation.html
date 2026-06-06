@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Order Confirmation</h1>
+
+<p>Your order has been placed successfully.</p>
+<p>{{ order.payment_status }}</p>
+
+<h2>Order Details</h2>
+<p><strong>Order ID:</strong> {{ order.order_id }}</p>
+<p><strong>Customer:</strong> {{ order.customer_name }}</p>
+<p><strong>Email:</strong> {{ order.email }}</p>
+<p><strong>Delivery Address:</strong> {{ order.address }}</p>
+
+<h2>Items Ordered</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Book</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Subtotal</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for item in order.items %}
+        <tr>
+            <td>{{ item.book_title }}</td>
+            <td>${{ "%.2f"|format(item.price) }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>${{ "%.2f"|format(item.subtotal()) }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h3>Total Paid: ${{ "%.2f"|format(order.total_amount) }}</h3>
+
+<h2>Invoice</h2>
+<p><strong>Invoice Number:</strong> {{ order.invoice.invoice_number }}</p>
+<p><strong>Payment Status:</strong> {{ order.payment_status }}</p>
+
+<a href="{{ url_for('catalogue') }}">Back to Catalogue</a>
+{% endblock %}
