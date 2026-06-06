@@ -3,7 +3,7 @@
 {% block content %}
 <h1>Checkout</h1>
 
-<form method="POST" action="{{ url_for('place_order') }}">
+<form method="POST" action="{{ url_for('customer.place_order') }}">
     <label for="customer_name">Customer Name</label>
     <input type="text" id="customer_name" name="customer_name" required>
 
@@ -27,5 +27,5 @@
     <button type="submit">Place Order</button>
 </form>
 
-<a href="{{ url_for('cart') }}">Back to Cart</a>
+<a href="{{ url_for('customer.view_cart') }}">Back to Cart</a>
 {% endblock %}

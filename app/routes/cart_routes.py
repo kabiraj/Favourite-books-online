@@ -2,10 +2,11 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 
 from app.models.cart import Cart
 from app.models.order import Order
-from app.routes.admin_routes import books
+from app.models.database import Database
+from app.models.book import Book
 
 
-cart_bp = Blueprint("cart", __name__)
+cart_bp = Blueprint("customer", __name__)
 
 
 class CartBook:
@@ -72,15 +73,14 @@ def view_cart():
 
 @cart_bp.route("/add-to-cart/<int:index>", methods=["POST"])
 def add_to_cart(index):
-    """
-    Adds a selected book from the catalogue/admin books list to the cart.
-    The index is used as the book identifier.
-    """
+    db = Database.get_db()
+    books = list(db.books.find())
+
     if index < 0 or index >= len(books):
         flash("Book not found.")
-        return redirect(url_for("admin.catalogue"))
+        return redirect(url_for("catalogue.browse"))
 
-    selected_book = books[index]
+    selected_book = Book.from_dict(books[index])
     quantity = request.form.get("quantity", 1)
 
     try:
@@ -99,7 +99,7 @@ def add_to_cart(index):
     except ValueError as error:
         flash(str(error))
 
-    return redirect(url_for("cart.view_cart"))
+    return redirect(url_for("customer.view_cart"))
 
 
 @cart_bp.route("/update-cart/<int:book_id>", methods=["POST"])
@@ -119,7 +119,7 @@ def update_cart(book_id):
     except ValueError as error:
         flash(str(error))
 
-    return redirect(url_for("cart.view_cart"))
+    return redirect(url_for("customer.view_cart"))
 
 
 @cart_bp.route("/remove-from-cart/<int:book_id>", methods=["POST"])
@@ -132,7 +132,7 @@ def remove_from_cart(book_id):
     save_cart(cart)
 
     flash("Book removed from cart.")
-    return redirect(url_for("cart.view_cart"))
+    return redirect(url_for("customer.view_cart"))
 
 
 @cart_bp.route("/checkout")
@@ -144,7 +144,7 @@ def checkout():
 
     if cart.is_empty():
         flash("Your cart is empty. Please add books before checkout.")
-        return redirect(url_for("cart.view_cart"))
+        return redirect(url_for("customer.view_cart"))
 
     return render_template("checkout.html")
 
@@ -182,4 +182,4 @@ def place_order():
 
     except ValueError as error:
         flash(str(error))
-        return redirect(url_for("cart.checkout"))
+        return redirect(url_for("customer.checkout"))

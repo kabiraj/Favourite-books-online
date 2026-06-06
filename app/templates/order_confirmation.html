@@ -42,5 +42,5 @@
 <p><strong>Invoice Number:</strong> {{ order.invoice.invoice_number }}</p>
 <p><strong>Payment Status:</strong> {{ order.payment_status }}</p>
 
-<a href="{{ url_for('catalogue') }}">Back to Catalogue</a>
+<a href="{{ url_for('catalogue.browse') }}">Back to Catalogue</a>
 {% endblock %}

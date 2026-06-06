@@ -11,7 +11,10 @@ def create_app():
     from app.routes.admin_routes import admin_bp
     from app.routes.auth_routes import auth_bp
     from app.routes.catalogue_routes import catalogue_bp
+    from app.routes.cart_routes import cart_bp
 
+
+    app.register_blueprint(cart_bp)
     app.register_blueprint(admin_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(catalogue_bp)

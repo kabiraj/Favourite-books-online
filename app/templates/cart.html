@@ -21,14 +21,14 @@
             <td>{{ item.book.title }}</td>
             <td>${{ "%.2f"|format(item.book.price) }}</td>
             <td>
-                <form method="POST" action="{{ url_for('update_cart', book_id=item.book.book_id) }}">
+                <form method="POST" action="{{ url_for('customer.update_cart', book_id=item.book.book_id) }}">
                     <input type="number" name="quantity" value="{{ item.quantity }}" min="1" required>
                     <button type="submit">Update</button>
                 </form>
             </td>
             <td>${{ "%.2f"|format(item.subtotal()) }}</td>
             <td>
-                <form method="POST" action="{{ url_for('remove_from_cart', book_id=item.book.book_id) }}">
+                <form method="POST" action="{{ url_for('customer.remove_from_cart', book_id=item.book.book_id) }}">
                     <button type="submit">Remove</button>
                 </form>
             </td>
@@ -39,13 +39,17 @@
 
 <h3>Total: ${{ "%.2f"|format(total) }}</h3>
 
-<a href="{{ url_for('checkout') }}">
+<a href="{{ url_for('customer.checkout') }}">
     <button>Proceed to Checkout</button>
 </a>
 
 {% else %}
 <p>Your cart is empty.</p>
-<a href="{{ url_for('catalogue') }}">Continue Shopping</a>
+
+<a href="{{ url_for('catalogue.browse') }}">
+    <button>Continue Shopping</button>
+</a>
+
 {% endif %}
 
 {% endblock %}

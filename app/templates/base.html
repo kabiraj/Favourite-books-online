@@ -7,7 +7,11 @@
 <body class="{% block body_class %}{% endblock %}">
 
 {% block navbar %}
-{% include 'partials/navbar_admin.html' %}
+    {% if request.path.startswith('/admin') %}
+        {% include 'partials/navbar_admin.html' %}
+    {% else %}
+        {% include 'partials/navbar_customer.html' %}
+    {% endif %}
 {% endblock %}
 
 {% block page_wrapper %}

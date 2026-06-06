@@ -5,11 +5,16 @@
                 <img class="navbar-logo" src="{{ url_for('static', filename='images/logo.png') }}" alt="Favourite Books logo">
             </a>
         </h1>
+
         <nav class="nav-links" aria-label="Admin navigation">
-        <a href="{{ url_for('admin.dashboard') }}">Dashboard</a>
-        <a href="{{ url_for('admin.catalogue') }}">Catalogue</a>
-        <a href="{{ url_for('admin.add_book') }}">Add Book</a>
-        <a href="{{ url_for('admin.logout') }}">Logout</a>
+            <a href="{{ url_for('admin.dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('admin.catalogue') }}">Catalogue</a>
+            <a href="{{ url_for('admin.add_book') }}">Add Book</a>
+            <a href="{{ url_for('admin.orders') }}">Orders</a>
+            <a href="{{ url_for('admin.shipments') }}">Shipments</a>
+            <a href="{{ url_for('admin.sales_report') }}">Sales Report</a>
+            <a href="{{ url_for('home') }}">Store</a>
+            <a href="{{ url_for('admin.logout') }}">Logout</a>
         </nav>
     </div>
 </div>
