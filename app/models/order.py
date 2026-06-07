@@ -51,6 +51,7 @@ class Order:
 
         self.total_amount = sum(item.subtotal() for item in self.items)
 
+        # Build payment, invoice, and shipment as part of placing the order.
         payment = Payment(payment_method, self.total_amount, self.order_id)
         self.payment_status = payment.process_payment()
         self.transaction_ref = payment.transaction_ref
@@ -61,6 +62,7 @@ class Order:
         )
 
     def to_dict(self):
+        # Flatten nested objects into one document for MongoDB storage.
         return {
             "order_id": self.order_id,
             "customer_name": self.customer_name,

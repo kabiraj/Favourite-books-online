@@ -70,6 +70,7 @@ def login():
             errors = {"password": "Incorrect password."}
             return render_template("login.html", errors=errors, form=form), 401
 
+        # Session keys used across browse, cart, checkout, and order history.
         session["customer_logged_in"] = True
         session["customer_email"] = customer.email
         session["customer_name"] = customer.name

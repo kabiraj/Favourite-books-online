@@ -9,6 +9,7 @@ from app.models.database import Database
 from app.models.order import Order
 from app.validation import validate_checkout
 
+# Cart, checkout, and customer order routes (Blueprint name "customer" for url_for).
 cart_bp = Blueprint("customer", __name__)
 
 
@@ -38,11 +39,13 @@ def _get_book_by_isbn(isbn):
 
 
 def _next_order_id(db):
+    # Auto-increment order_id from the highest existing order in MongoDB.
     latest = db.orders.find_one(sort=[("order_id", -1)])
     return (latest["order_id"] + 1) if latest else 1
 
 
 def get_cart():
+    # Rebuild Cart from Flask session (stored as plain dicts, not Book objects).
     cart_data = session.get("cart", [])
     cart = Cart()
 
@@ -58,6 +61,7 @@ def get_cart():
 
 
 def save_cart(cart):
+    # Write cart back to session in a JSON-serializable format.
     session["cart"] = [
         {
             "isbn": item.book.isbn,
@@ -70,6 +74,7 @@ def save_cart(cart):
 
 
 def _reduce_stock(cart):
+    # Check all stock first, then decrement — avoids partial updates on failure.
     db = Database.get_db()
     for item in cart.items:
         book = db.books.find_one({"isbn": item.book.isbn})
@@ -219,6 +224,7 @@ def place_order():
         request.form.get("cvv"),
     )
     if errors:
+        # Keep form values in session so checkout page can repopulate after errors.
         session["checkout_form"] = {
             key: request.form.get(key, "")
             for key in (
@@ -264,6 +270,7 @@ def place_order():
 @cart_bp.route("/orders")
 @customer_login_required
 def my_orders():
+    # List all orders placed by the logged-in customer (matched by email).
     email = session.get("customer_email")
     orders = list(
         Database.get_db().orders.find({"email": email}).sort("order_id", -1)

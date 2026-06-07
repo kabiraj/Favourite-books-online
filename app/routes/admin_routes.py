@@ -177,6 +177,7 @@ def update_shipment(order_id):
         flash("Shipment status is required.", "error")
         return redirect(url_for("admin.shipments"))
 
+    # Shipment status lives on the order document (no separate shipments collection).
     result = Database.get_db().orders.update_one(
         {"order_id": order_id},
         {"$set": {"shipment_status": new_status}},

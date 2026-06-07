@@ -4,9 +4,7 @@ import os
 
 load_dotenv()
 
-print("MONGODB_URI loaded:", os.getenv("MONGODB_URI"))
-
-#class declaration
+# Singleton — one shared MongoDB connection for the whole app.
 class Database: 
     _instance = None
     _client = None

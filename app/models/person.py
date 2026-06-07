@@ -1,5 +1,6 @@
 import bcrypt
 
+# Base class for Customer — handles bcrypt password hashing and verification.
 class Person:
     def __init__(self, name, email, password, is_hashed=False):
         self.id = None

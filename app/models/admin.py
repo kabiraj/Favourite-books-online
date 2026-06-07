@@ -1,3 +1,4 @@
+# Demo admin account for catalogue and order management.
 class Admin:
     def __init__(self, username, password):
         self.username = username

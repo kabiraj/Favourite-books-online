@@ -1,3 +1,4 @@
+# Simulated payment — card fields are validated at checkout but not persisted.
 class Payment:
     def __init__(self, payment_method, amount, order_id):
         self.payment_method = payment_method

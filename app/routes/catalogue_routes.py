@@ -7,6 +7,7 @@ catalogue_bp = Blueprint("catalogue", __name__)
 
 @catalogue_bp.route("/browse")
 def browse():
+    # Assignment requires customers to log in before browsing the catalogue.
     if not session.get("customer_logged_in"):
         flash("Please log in to browse books.", "error")
         return redirect(url_for("auth.login"))

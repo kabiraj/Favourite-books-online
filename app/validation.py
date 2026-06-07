@@ -1,5 +1,6 @@
 import re
 
+# Server-side validation for signup, login, and checkout forms.
 EMAIL_PATTERN = re.compile(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")
 PASSWORD_PATTERN = re.compile(
     r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$"
