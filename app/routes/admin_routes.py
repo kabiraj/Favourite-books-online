@@ -39,7 +39,16 @@ def dashboard():
         return redirect(url_for("admin.login"))
 
     books_count = Database.get_db().books.count_documents({})
-    return render_template("admin/dashboard.html", books_count=books_count)
+    orders_count = Database.get_db().orders.count_documents({})
+    pending_shipments_count = Database.get_db().orders.count_documents(
+        {"shipment_status": {"$ne": "Delivered"}}
+    )
+    return render_template(
+        "admin/dashboard.html",
+        books_count=books_count,
+        orders_count=orders_count,
+        pending_shipments_count=pending_shipments_count,
+    )
 
 
 @admin_bp.route("/catalogue")
@@ -141,7 +150,10 @@ def orders():
     if not session.get("admin_logged_in"):
         return redirect(url_for("admin.login"))
 
-    return render_template("admin/orders.html")
+    order_list = list(
+        Database.get_db().orders.find().sort("order_id", -1)
+    )
+    return render_template("admin/orders.html", orders=order_list)
 
 
 @admin_bp.route("/shipments")
@@ -149,7 +161,32 @@ def shipments():
     if not session.get("admin_logged_in"):
         return redirect(url_for("admin.login"))
 
-    return render_template("admin/shipments.html")
+    shipment_list = list(
+        Database.get_db().orders.find().sort("order_id", -1)
+    )
+    return render_template("admin/shipments.html", shipments=shipment_list)
+
+
+@admin_bp.route("/shipments/<int:order_id>/update", methods=["POST"])
+def update_shipment(order_id):
+    if not session.get("admin_logged_in"):
+        return redirect(url_for("admin.login"))
+
+    new_status = (request.form.get("status") or "").strip()
+    if not new_status:
+        flash("Shipment status is required.", "error")
+        return redirect(url_for("admin.shipments"))
+
+    result = Database.get_db().orders.update_one(
+        {"order_id": order_id},
+        {"$set": {"shipment_status": new_status}},
+    )
+    if result.modified_count:
+        flash(f"Shipment for order #{order_id} updated to '{new_status}'.", "success")
+    else:
+        flash("Order not found.", "error")
+
+    return redirect(url_for("admin.shipments"))
 
 
 @admin_bp.route("/sales-report")

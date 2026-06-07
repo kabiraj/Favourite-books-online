@@ -63,12 +63,20 @@
         <div class="invoice-box">
             <h2>Invoice</h2>
             <p><strong>Invoice Number:</strong> {{ order.invoice.invoice_number }}</p>
+            <p><strong>Payment Method:</strong> {{ order.payment_method }}</p>
+            <p><strong>Transaction Reference:</strong> {{ order.transaction_ref }}</p>
             <p><strong>Payment Status:</strong> {{ order.payment_status }}</p>
         </div>
 
+        <div class="invoice-box">
+            <h2>Shipment</h2>
+            <p><strong>Tracking Number:</strong> {{ order.shipment.tracking_no }}</p>
+            <p><strong>Status:</strong> {{ order.shipment.status }}</p>
+        </div>
+
         <div class="button-row">
-            <a href="/browse" class="primary-btn">Back to Catalogue</a>
-            <a href="/cart" class="secondary-btn">View Cart</a>
+            <a href="{{ url_for('catalogue.browse') }}" class="primary-btn">Back to Catalogue</a>
+            <a href="{{ url_for('customer.my_orders') }}" class="secondary-btn">My Orders</a>
         </div>
 
     </div>

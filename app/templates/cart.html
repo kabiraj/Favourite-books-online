@@ -42,7 +42,7 @@
                     <td>${{ "%.2f"|format(item.book.price) }}</td>
 
                     <td>
-                        <form method="POST" action="{{ url_for('customer.update_cart', book_id=item.book.book_id) }}" class="quantity-form">
+                        <form method="POST" action="{{ url_for('customer.update_cart', isbn=item.book.isbn) }}" class="quantity-form">
                             <input 
                                 type="number" 
                                 name="quantity" 
@@ -57,7 +57,7 @@
                     <td class="subtotal">${{ "%.2f"|format(item.subtotal()) }}</td>
 
                     <td>
-                        <form method="POST" action="{{ url_for('customer.remove_from_cart', book_id=item.book.book_id) }}">
+                        <form method="POST" action="{{ url_for('customer.remove_from_cart', isbn=item.book.isbn) }}">
                             <button type="submit" class="remove-btn">Remove</button>
                         </form>
                     </td>

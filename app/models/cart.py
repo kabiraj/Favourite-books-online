@@ -1,5 +1,6 @@
 from app.models.cart_item import CartItem
 
+
 class Cart:
     def __init__(self):
         self.items = []
@@ -11,23 +12,23 @@ class Cart:
             raise ValueError("Quantity must be greater than 0")
 
         for item in self.items:
-            if item.book.book_id == book.book_id:
+            if item.book.isbn == book.isbn:
                 item.update_quantity(item.quantity + quantity)
                 return
 
         self.items.append(CartItem(book, quantity))
 
-    def remove_item(self, book_id):
-        self.items = [item for item in self.items if item.book.book_id != book_id]
+    def remove_item(self, isbn):
+        self.items = [item for item in self.items if item.book.isbn != isbn]
 
-    def update_quantity(self, book_id, quantity):
+    def update_quantity(self, isbn, quantity):
         quantity = int(quantity)
 
         if quantity <= 0:
             raise ValueError("Quantity must be greater than 0")
 
         for item in self.items:
-            if item.book.book_id == book_id:
+            if item.book.isbn == isbn:
                 item.update_quantity(quantity)
                 return
 

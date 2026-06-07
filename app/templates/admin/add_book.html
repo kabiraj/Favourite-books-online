@@ -1,54 +1,63 @@
 {% extends 'base.html' %}
 
+{% block container_class %}container container-admin{% endblock %}
+
 {% block content %}
-<h2>Add Book</h2>
+<div class="admin-form-page">
+    <header class="admin-page-header">
+        <h2>Add book</h2>
+        <p>Add a new title to the catalogue. Required fields are marked with *.</p>
+    </header>
 
-<div class="form-card">
-    <form method="POST">
-        <div class="form-grid">
-            <div>
-                <label>Title *</label>
-                <input type="text" name="title" required>
+    <div class="form-card admin-book-form">
+        <form method="POST" action="{{ url_for('admin.add_book') }}">
+            <div class="form-grid">
+                <div class="form-field">
+                    <label for="title">Title *</label>
+                    <input type="text" id="title" name="title" placeholder="e.g. The Great Gatsby" required>
+                </div>
+
+                <div class="form-field">
+                    <label for="isbn">ISBN *</label>
+                    <input type="text" id="isbn" name="isbn" placeholder="e.g. 978-0743273565" required>
+                </div>
+
+                <div class="form-field">
+                    <label for="author">Author *</label>
+                    <input type="text" id="author" name="author" placeholder="e.g. F. Scott Fitzgerald" required>
+                </div>
+
+                <div class="form-field">
+                    <label for="genre">Genre</label>
+                    <input type="text" id="genre" name="genre" placeholder="e.g. Fiction">
+                </div>
+
+                <div class="form-field">
+                    <label for="price">Price ($) *</label>
+                    <input type="number" id="price" step="0.01" min="0" name="price" placeholder="0.00" required>
+                </div>
+
+                <div class="form-field">
+                    <label for="stock">Stock quantity *</label>
+                    <input type="number" id="stock" min="0" name="stock" placeholder="0" required>
+                </div>
+
+                <div class="form-field wide">
+                    <label for="image_url">Cover image URL</label>
+                    <input type="url" id="image_url" name="image_url" placeholder="https://example.com/cover.jpg">
+                </div>
+
+                <div class="form-field wide">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description" placeholder="Short summary of the book…"></textarea>
+                </div>
             </div>
 
-            <div>
-                <label>ISBN *</label>
-                <input type="text" name="isbn" required>
+            <div class="form-actions">
+                <button class="btn" type="submit">Add book</button>
+                <a class="cancel-btn" href="{{ url_for('admin.catalogue') }}">Cancel</a>
             </div>
-
-            <div>
-                <label>Author *</label>
-                <input type="text" name="author" required>
-            </div>
-
-            <div>
-                <label>Price ($) *</label>
-                <input type="number" step="0.01" name="price" required>
-            </div>
-
-            <div>
-                <label>Stock Quantity *</label>
-                <input type="number" name="stock" required>
-            </div>
-
-            <div>
-                <label>Genre</label>
-                <input type="text" name="genre" placeholder="e.g. Fiction">
-            </div>
-
-            <div class="wide">
-                <label>Cover Image URL</label>
-                <input type="text" name="image_url" placeholder="https://...">
-            </div>
-
-            <div class="wide">
-                <label>Description</label>
-                <textarea name="description"></textarea>
-            </div>
-        </div>
-
-        <button class="btn" type="submit">Add Book</button>
-        <a class="cancel-btn" href="/admin/catalogue">Cancel</a>
-    </form>
+        </form>
+    </div>
 </div>
 {% endblock %}

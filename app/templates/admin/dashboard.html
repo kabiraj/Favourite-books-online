@@ -1,36 +1,56 @@
 {% extends 'base.html' %}
 
+{% block container_class %}container container-wide{% endblock %}
+
 {% block content %}
+<div class="admin-page">
+    <header class="admin-page-header">
+        <h2>Dashboard</h2>
+        <p>Overview of catalogue, orders, and fulfilment.</p>
+    </header>
 
-<h2 class="page-heading">🎛️ Admin Dashboard</h2>
+    <div class="dashboard-cards">
+        <article class="dashboard-box blue">
+            <h3>Total books</h3>
+            <p class="dashboard-stat">{{ books_count }}</p>
+            <a href="{{ url_for('admin.catalogue') }}">Manage catalogue</a>
+        </article>
 
-<div class="dashboard-cards">
+        <article class="dashboard-box green">
+            <h3>Total orders</h3>
+            <p class="dashboard-stat">{{ orders_count }}</p>
+            <a href="{{ url_for('admin.orders') }}">View orders</a>
+        </article>
 
-    <div class="dashboard-box blue">
-        <h3>Total Books</h3>
-        <p>{{ books_count }}</p>
-        <a href="/admin/catalogue">Manage Catalogue →</a>
+        <article class="dashboard-box yellow">
+            <h3>Pending shipments</h3>
+            <p class="dashboard-stat">{{ pending_shipments_count }}</p>
+            <a href="{{ url_for('admin.shipments') }}">Manage shipments</a>
+        </article>
     </div>
 
-    <div class="dashboard-box green">
-        <h3>Total Orders</h3>
-        <p>0</p>
-        <a href="/admin/orders">View Orders →</a>
-    </div>
-
-    <div class="dashboard-box yellow">
-        <h3>Pending Shipments</h3>
-        <p>0</p>
-        <a href="/admin/shipments">Manage Shipments →</a>
-    </div>
-
+    <h3 class="admin-section-title">Quick actions</h3>
+    <nav class="admin-menu" aria-label="Admin quick actions">
+        <a href="{{ url_for('admin.catalogue') }}">
+            <span class="admin-menu-label">Manage catalogue</span>
+            <span class="admin-menu-desc">View, edit, and remove books</span>
+        </a>
+        <a href="{{ url_for('admin.add_book') }}">
+            <span class="admin-menu-label">Add book</span>
+            <span class="admin-menu-desc">Add a new title to the store</span>
+        </a>
+        <a href="{{ url_for('admin.orders') }}">
+            <span class="admin-menu-label">View orders</span>
+            <span class="admin-menu-desc">Customer orders and status</span>
+        </a>
+        <a href="{{ url_for('admin.shipments') }}">
+            <span class="admin-menu-label">Manage shipments</span>
+            <span class="admin-menu-desc">Packaging and delivery tracking</span>
+        </a>
+        <a href="{{ url_for('admin.sales_report') }}">
+            <span class="admin-menu-label">Sales report</span>
+            <span class="admin-menu-desc">Books sold by period</span>
+        </a>
+    </nav>
 </div>
-
-<div class="admin-menu">
-    <a href="/admin/catalogue">📖 Manage Book Catalogue</a>
-    <a href="/admin/orders">🛍️ View All Orders</a>
-    <a href="/admin/shipments">🚚 Manage Shipments</a>
-    <a href="/admin/sales-report">📊 Sales Report</a>
-</div>
-
 {% endblock %}

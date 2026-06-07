@@ -8,28 +8,32 @@
 
         <div class="checkout-header">
             <h1>Checkout</h1>
-            <p>Please enter your delivery details and choose a payment method to complete your order.</p>
+            <p>Please enter your delivery details and card payment information to complete your order.</p>
         </div>
 
         <form method="POST" action="{{ url_for('customer.place_order') }}" class="checkout-form">
+            {% set f = form or {} %}
 
             <div class="form-group">
                 <label for="customer_name">Customer Name</label>
-                <input 
-                    type="text" 
-                    id="customer_name" 
-                    name="customer_name" 
+                <input
+                    type="text"
+                    id="customer_name"
+                    name="customer_name"
+                    value="{{ f.get('customer_name') or (customer.name if customer else session.get('customer_name', '')) }}"
                     placeholder="Enter your full name"
+                    minlength="4"
                     required
                 >
             </div>
 
             <div class="form-group">
                 <label for="email">Email</label>
-                <input 
-                    type="email" 
-                    id="email" 
-                    name="email" 
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value="{{ f.get('email') or (customer.email if customer else session.get('customer_email', '')) }}"
                     placeholder="Enter your email address"
                     required
                 >
@@ -37,79 +41,94 @@
 
             <div class="form-group">
                 <label for="address">Delivery Address</label>
-                <textarea 
-                    id="address" 
-                    name="address" 
+                <textarea
+                    id="address"
+                    name="address"
                     placeholder="Enter your delivery address"
+                    minlength="10"
                     required
-                ></textarea>
+                >{{ f.get('address') or (customer.address if customer else '') }}</textarea>
             </div>
 
             <div class="form-group">
                 <label for="phone">Phone Number</label>
-                <input 
-                    type="text" 
-                    id="phone" 
-                    name="phone" 
-                    placeholder="Enter your phone number"
+                <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    value="{{ f.get('phone', '') }}"
+                    placeholder="e.g. 0400000000"
+                    minlength="10"
+                    maxlength="20"
                     required
                 >
             </div>
 
             <div class="form-group">
                 <label for="payment_method">Payment Method</label>
-                <select id="payment_method" name="payment_method" required onchange="toggleCardDetails()">
-                    <option value="">Select payment method</option>
-                    <option value="Card">Card</option>
-                    <option value="PayPal">PayPal</option>
-                    <option value="Cash on Delivery">Cash on Delivery</option>
+                <select id="payment_method" name="payment_method" required>
+                    <option value="Card" selected>Card</option>
                 </select>
             </div>
 
-            <div id="card-details" class="card-details" style="display: none;">
+            <div id="card-details" class="card-details">
                 <h3>Card Details</h3>
 
                 <div class="form-group">
                     <label for="card_name">Name on Card</label>
-                    <input 
-                        type="text" 
-                        id="card_name" 
-                        name="card_name" 
+                    <input
+                        type="text"
+                        id="card_name"
+                        name="card_name"
+                        value="{{ f.get('card_name', '') }}"
                         placeholder="Enter name on card"
+                        minlength="2"
+                        required
                     >
                 </div>
 
                 <div class="form-group">
                     <label for="card_number">Card Number</label>
-                    <input 
-                        type="text" 
-                        id="card_number" 
-                        name="card_number" 
+                    <input
+                        type="text"
+                        id="card_number"
+                        name="card_number"
+                        value="{{ f.get('card_number', '') }}"
                         placeholder="1234 5678 9012 3456"
                         maxlength="19"
+                        pattern="[0-9\s]{16,19}"
+                        title="Enter a 16-digit card number"
+                        required
                     >
                 </div>
 
                 <div class="card-row">
                     <div class="form-group">
                         <label for="expiry_date">Expiry Date</label>
-                        <input 
-                            type="text" 
-                            id="expiry_date" 
-                            name="expiry_date" 
+                        <input
+                            type="text"
+                            id="expiry_date"
+                            name="expiry_date"
+                            value="{{ f.get('expiry_date', '') }}"
                             placeholder="MM/YY"
                             maxlength="5"
+                            pattern="(0[1-9]|1[0-2])\/[0-9]{2}"
+                            title="Use MM/YY format, e.g. 12/28"
+                            required
                         >
                     </div>
 
                     <div class="form-group">
                         <label for="cvv">CVV</label>
-                        <input 
-                            type="password" 
-                            id="cvv" 
-                            name="cvv" 
+                        <input
+                            type="password"
+                            id="cvv"
+                            name="cvv"
                             placeholder="123"
-                            maxlength="4"
+                            maxlength="3"
+                            pattern="[0-9]{3}"
+                            title="CVV must be 3 digits"
+                            required
                         >
                     </div>
                 </div>
@@ -129,38 +148,5 @@
     </div>
 
 </div>
-
-<script>
-    function toggleCardDetails() {
-        const paymentMethod = document.getElementById("payment_method").value;
-        const cardDetails = document.getElementById("card-details");
-
-        const cardName = document.getElementById("card_name");
-        const cardNumber = document.getElementById("card_number");
-        const expiryDate = document.getElementById("expiry_date");
-        const cvv = document.getElementById("cvv");
-
-        if (paymentMethod === "Card") {
-            cardDetails.style.display = "block";
-
-            cardName.required = true;
-            cardNumber.required = true;
-            expiryDate.required = true;
-            cvv.required = true;
-        } else {
-            cardDetails.style.display = "none";
-
-            cardName.required = false;
-            cardNumber.required = false;
-            expiryDate.required = false;
-            cvv.required = false;
-
-            cardName.value = "";
-            cardNumber.value = "";
-            expiryDate.value = "";
-            cvv.value = "";
-        }
-    }
-</script>
 
 {% endblock %}

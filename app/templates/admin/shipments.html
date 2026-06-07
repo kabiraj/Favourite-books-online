@@ -1,19 +1,53 @@
 {% extends 'base.html' %}
 
+{% block container_class %}container container-wide{% endblock %}
+
 {% block content %}
-<h2>Shipments</h2>
+<div class="admin-page-header">
+    <h2>Shipments</h2>
+    <p>Update delivery status for customer orders.</p>
+</div>
 
-<table>
-    <tr>
-        <th>Tracking No</th>
-        <th>Order ID</th>
-        <th>Status</th>
-    </tr>
-
-    <tr>
-        <td colspan="3" class="text-center">
-            No shipments found.
-        </td>
-    </tr>
-</table>
+{% if shipments %}
+    <div class="table-wrap">
+        <table class="catalogue-table">
+            <thead>
+                <tr>
+                    <th>Tracking no</th>
+                    <th>Order ID</th>
+                    <th>Customer</th>
+                    <th>Status</th>
+                    <th class="col-actions">Update</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for shipment in shipments %}
+                <tr>
+                    <td>{{ shipment.tracking_no }}</td>
+                    <td>#{{ shipment.order_id }}</td>
+                    <td>{{ shipment.customer_name }}</td>
+                    <td>{{ shipment.shipment_status }}</td>
+                    <td class="col-actions">
+                        <form method="POST" action="{{ url_for('admin.update_shipment', order_id=shipment.order_id) }}">
+                            <select name="status" required>
+                                <option value="">Change status</option>
+                                <option value="Processing">Processing</option>
+                                <option value="Packed">Packed</option>
+                                <option value="Dispatched">Dispatched</option>
+                                <option value="Delivered">Delivered</option>
+                            </select>
+                            <button class="btn btn-small" type="submit">Save</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <div class="admin-empty">
+        <h3>No shipments found</h3>
+        <p>Shipments are created automatically when customers place orders.</p>
+    </div>
+{% endif %}
 {% endblock %}

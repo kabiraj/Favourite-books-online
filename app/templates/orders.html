@@ -1,11 +1,11 @@
-{% extends 'base.html' %}
+{% extends 'customer_base.html' %}
 
 {% block container_class %}container container-wide{% endblock %}
 
 {% block content %}
-<div class="admin-page-header">
-    <h2>All orders</h2>
-    <p>{{ orders|length }} order{% if orders|length != 1 %}s{% endif %} recorded</p>
+<div class="browse-header">
+    <h2>My orders</h2>
+    <p>Track your past purchases and shipment status.</p>
 </div>
 
 {% if orders %}
@@ -14,22 +14,24 @@
             <thead>
                 <tr>
                     <th>Order ID</th>
-                    <th>Customer</th>
-                    <th>Email</th>
                     <th>Total</th>
                     <th>Payment</th>
-                    <th>Shipment</th>
+                    <th>Tracking</th>
+                    <th>Shipment status</th>
                 </tr>
             </thead>
             <tbody>
                 {% for order in orders %}
                 <tr>
                     <td>#{{ order.order_id }}</td>
-                    <td>{{ order.customer_name }}</td>
-                    <td>{{ order.email }}</td>
                     <td class="col-price">${{ '%.2f'|format(order.total_amount) }}</td>
                     <td>{{ order.payment_status }}</td>
-                    <td>{{ order.shipment_status }} ({{ order.tracking_no }})</td>
+                    <td>{{ order.tracking_no }}</td>
+                    <td>
+                        <span class="stock-badge {% if order.shipment_status == 'Delivered' %}stock-in{% else %}stock-out{% endif %}">
+                            {{ order.shipment_status }}
+                        </span>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -37,8 +39,9 @@
     </div>
 {% else %}
     <div class="admin-empty">
-        <h3>No orders found</h3>
-        <p>Orders will appear here when customers complete checkout.</p>
+        <h3>No orders yet</h3>
+        <p>Browse the catalogue and place your first order.</p>
+        <a class="btn" href="{{ url_for('catalogue.browse') }}">Browse books</a>
     </div>
 {% endif %}
 {% endblock %}

@@ -1,35 +1,77 @@
 {% extends 'base.html' %}
 
+{% block container_class %}container container-wide{% endblock %}
+
 {% block content %}
-<div class="page-title">
-    <h2>Manage Books</h2>
-    <a class="btn" href="{{ url_for('admin.add_book') }}">⊕ Add Book</a>
+<div class="admin-page">
+    <header class="admin-page-header admin-page-header-row">
+        <div>
+            <h2>Manage catalogue</h2>
+            <p>{{ books|length }} book{% if books|length != 1 %}s{% endif %} in the store</p>
+        </div>
+        <a class="btn" href="{{ url_for('admin.add_book') }}">Add book</a>
+    </header>
+
+    {% if books %}
+        <div class="table-wrap">
+            <table class="catalogue-table">
+                <thead>
+                    <tr>
+                        <th class="col-cover">Cover</th>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>ISBN</th>
+                        <th>Genre</th>
+                        <th>Price</th>
+                        <th>Stock</th>
+                        <th class="col-actions">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for book in books %}
+                    <tr>
+                        <td class="col-cover">
+                            {% if book.image_url %}
+                                <img
+                                    class="catalogue-cover"
+                                    src="{{ book.image_url }}"
+                                    alt="Cover of {{ book.title }}"
+                                >
+                            {% else %}
+                                <span class="catalogue-cover catalogue-cover-empty" aria-hidden="true">—</span>
+                            {% endif %}
+                        </td>
+                        <td class="col-title">{{ book.title }}</td>
+                        <td>{{ book.author }}</td>
+                        <td class="col-isbn">{{ book.isbn }}</td>
+                        <td>{{ book.genre or '—' }}</td>
+                        <td class="col-price">${{ '%.2f'|format(book.price) }}</td>
+                        <td>
+                            {% if book.stock > 0 %}
+                                <span class="stock-badge stock-in">{{ book.stock }}</span>
+                            {% else %}
+                                <span class="stock-badge stock-out">Out</span>
+                            {% endif %}
+                        </td>
+                        <td class="col-actions">
+                            <a class="btn btn-small" href="{{ url_for('admin.edit_book', book_id=book.id) }}">Edit</a>
+                            <a
+                                class="btn btn-small btn-danger"
+                                href="{{ url_for('admin.delete_book', book_id=book.id) }}"
+                                onclick="return confirm('Delete {{ book.title }}?');"
+                            >Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="admin-empty">
+            <h3>No books yet</h3>
+            <p>Add your first title to make it available on the customer browse page.</p>
+            <a class="btn" href="{{ url_for('admin.add_book') }}">Add book</a>
+        </div>
+    {% endif %}
 </div>
-
-<table>
-    <tr>
-        <th>Title</th>
-        <th>Author</th>
-        <th>ISBN</th>
-        <th>Genre</th>
-        <th>Price</th>
-        <th>Stock</th>
-        <th>Actions</th>
-    </tr>
-
-    {% for book in books %}
-    <tr>
-        <td>{{ book.title }}</td>
-        <td>{{ book.author }}</td>
-        <td class="isbn">{{ book.isbn }}</td>
-        <td>{{ book.genre }}</td>
-        <td>${{ book.price }}</td>
-        <td><span class="stock">{{ book.stock }}</span></td>
-        <td>
-            <a class="edit-btn" href="{{ url_for('admin.edit_book', book_id=book.id) }}">Edit</a>
-            <a class="delete-btn" href="{{ url_for('admin.delete_book', book_id=book.id) }}">Delete</a>
-        </td>
-    </tr>
-    {% endfor %}
-</table>
 {% endblock %}

@@ -44,8 +44,7 @@
                             Out of stock
                         {% endif %}
                     </p>
-                    {# Lasith: implement POST /cart/add in customer_routes #}
-                    <form method="POST" action="{{ url_for('customer.add_to_cart', index=loop.index0) }}" class="book-add-form">
+                    <form method="POST" action="{{ url_for('customer.add_to_cart') }}" class="book-add-form">
                         <input type="hidden" name="isbn" value="{{ book.isbn }}">
                         <button
                             class="submit-btn full-width"
