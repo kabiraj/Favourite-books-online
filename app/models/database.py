@@ -2,8 +2,9 @@ from pymongo import MongoClient
 from dotenv import load_dotenv
 import os
 
-#Loading the env file to read mongodb string
 load_dotenv()
+
+print("MONGODB_URI loaded:", os.getenv("MONGODB_URI"))
 
 #class declaration
 class Database: 
