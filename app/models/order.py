@@ -87,7 +87,6 @@ class Order:
             ],
             "created_at": self.created_at,
         }
-
     @classmethod
     def from_dict(cls, data):
         order = cls.__new__(cls)
@@ -116,3 +115,4 @@ class Order:
             status=data.get("shipment_status", "Processing"),
         )
         return order
+

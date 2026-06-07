@@ -6,16 +6,6 @@
 
     <div class="cart-card">
 
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <div class="cart-alert">
-                    {% for message in messages %}
-                        <p>{{ message }}</p>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        {% endwith %}
-
         <div class="cart-header">
             <h1>Shopping Cart</h1>
             <p>Review your selected books before proceeding to checkout.</p>

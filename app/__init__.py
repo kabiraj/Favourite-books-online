@@ -24,7 +24,6 @@ def create_app():
         return render_template(
             "home.html",
             customer_logged_in=session.get("customer_logged_in"),
-            customer_name=session.get("customer_name"),
         )
 
     return app

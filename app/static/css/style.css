@@ -1127,12 +1127,6 @@ body.auth-page .login-wrapper {
     min-width: 150px;
 }
 
-.home-welcome {
-    margin: 18px 0 0;
-    font-size: 0.95rem;
-    color: rgba(255, 255, 255, 0.88);
-}
-
 .btn-outline {
     display: inline-block;
     padding: 12px 22px;
@@ -1438,6 +1432,31 @@ body.auth-page .login-wrapper {
     border-color: #007bff;
     background: #ffffff;
     box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.12);
+}
+
+.form-group input.input-invalid,
+.form-group textarea.input-invalid,
+.form-group select.input-invalid {
+    border-color: var(--clr-error);
+    background: #fff;
+}
+
+.form-group input.input-invalid:focus,
+.form-group textarea.input-invalid:focus,
+.form-group select.input-invalid:focus {
+    border-color: var(--clr-error);
+    box-shadow: 0 0 0 3px rgba(224, 82, 82, 0.15);
+}
+
+.form-group .field-error {
+    display: block;
+    margin-top: 6px;
+    font-size: 0.85rem;
+    color: var(--clr-error);
+}
+
+.form-group .field-error[hidden] {
+    display: none;
 }
 
 .card-details {

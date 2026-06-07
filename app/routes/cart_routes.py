@@ -169,7 +169,7 @@ def remove_from_cart(isbn):
     cart = get_cart()
     cart.remove_item(isbn)
     save_cart(cart)
-    flash("Book removed from cart.", "success")
+    flash("Book removed from cart.", "error")
     return redirect(url_for("customer.view_cart"))
 
 
@@ -198,6 +198,7 @@ def checkout():
         customer=customer,
         total=cart.total(),
         form=session.pop("checkout_form", {}),
+        errors=session.pop("checkout_errors", {}),
     )
 
 
@@ -238,8 +239,7 @@ def place_order():
                 "expiry_date",
             )
         }
-        for message in errors.values():
-            flash(message, "error")
+        session["checkout_errors"] = errors
         return redirect(url_for("customer.checkout"))
 
     try:

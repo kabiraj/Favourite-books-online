@@ -76,7 +76,6 @@ def login():
         session["customer_name"] = customer.name
         session["customer_id"] = str(customer.id)
 
-        flash(f"Welcome back, {customer.name}!", "success")
         return redirect(url_for("home"))
 
     return render_template("login.html")

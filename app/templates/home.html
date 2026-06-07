@@ -21,9 +21,6 @@
                     <a class="btn-outline" href="{{ url_for('catalogue.browse') }}">Browse books</a>
                 {% endif %}
             </div>
-            {% if customer_logged_in %}
-                <p class="home-welcome">Welcome back, {{ customer_name }}.</p>
-            {% endif %}
         </div>
     </header>
 

@@ -2,7 +2,6 @@ class Invoice:
     def __init__(self, order):
         self.order = order
         self.invoice_number = f"INV-{order.order_id}"
-
     def get_total(self):
         return self.order.total_amount
 

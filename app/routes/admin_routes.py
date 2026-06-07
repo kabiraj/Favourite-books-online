@@ -138,7 +138,7 @@ def delete_book(book_id):
 
     result = Database.get_db().books.delete_one({"_id": oid})
     if result.deleted_count:
-        flash("Book removed.", "success")
+        flash("Book removed from catalogue.", "error")
     else:
         flash("Book not found.", "error")
 
