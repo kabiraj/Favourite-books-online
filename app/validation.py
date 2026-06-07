@@ -141,3 +141,72 @@ def validate_card(card_name, card_number, expiry_date, cvv):
         errors["cvv"] = "CVV must be 3 digits."
 
     return errors
+
+
+URL_PATTERN = re.compile(r"^https?://[^\s]+$", re.IGNORECASE)
+
+
+def validate_book(title, author, isbn, genre, price, stock, image_url="", description=""):
+    errors = {}
+    title = (title or "").strip()
+    author = (author or "").strip()
+    isbn = (isbn or "").strip()
+    price = (price or "").strip()
+    stock = (stock or "").strip()
+    image_url = (image_url or "").strip()
+
+    if not title:
+        errors["title"] = "Title is required."
+    elif len(title) < 2:
+        errors["title"] = "Title must be at least 2 characters."
+
+    if not author:
+        errors["author"] = "Author is required."
+    elif len(author) < 2:
+        errors["author"] = "Author must be at least 2 characters."
+
+    if not isbn:
+        errors["isbn"] = "ISBN is required."
+    else:
+        isbn_digits = re.sub(r"[^0-9Xx]", "", isbn)
+        if len(isbn_digits) not in (10, 13):
+            errors["isbn"] = "ISBN must be 10 or 13 digits."
+
+    if not price:
+        errors["price"] = "Price is required."
+    else:
+        try:
+            price_value = float(price)
+            if price_value <= 0:
+                errors["price"] = "Price must be greater than 0."
+        except ValueError:
+            errors["price"] = "Enter a valid price."
+
+    if stock == "":
+        errors["stock"] = "Stock quantity is required."
+    else:
+        try:
+            stock_value = int(stock)
+            if stock_value < 0:
+                errors["stock"] = "Stock cannot be negative."
+        except ValueError:
+            errors["stock"] = "Enter a valid whole number for stock."
+
+    if image_url and not URL_PATTERN.match(image_url):
+        errors["image_url"] = "Enter a valid URL starting with http:// or https://."
+
+    return errors
+
+
+def validate_admin_login(username, password):
+    errors = {}
+    username = (username or "").strip()
+    password = password or ""
+
+    if not username:
+        errors["username"] = "Username is required."
+
+    if not password:
+        errors["password"] = "Password is required."
+
+    return errors

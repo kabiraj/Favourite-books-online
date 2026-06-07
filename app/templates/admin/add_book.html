@@ -10,48 +10,8 @@
     </header>
 
     <div class="form-card admin-book-form">
-        <form method="POST" action="{{ url_for('admin.add_book') }}">
-            <div class="form-grid">
-                <div class="form-field">
-                    <label for="title">Title *</label>
-                    <input type="text" id="title" name="title" placeholder="e.g. The Great Gatsby" required>
-                </div>
-
-                <div class="form-field">
-                    <label for="isbn">ISBN *</label>
-                    <input type="text" id="isbn" name="isbn" placeholder="e.g. 978-0743273565" required>
-                </div>
-
-                <div class="form-field">
-                    <label for="author">Author *</label>
-                    <input type="text" id="author" name="author" placeholder="e.g. F. Scott Fitzgerald" required>
-                </div>
-
-                <div class="form-field">
-                    <label for="genre">Genre</label>
-                    <input type="text" id="genre" name="genre" placeholder="e.g. Fiction">
-                </div>
-
-                <div class="form-field">
-                    <label for="price">Price ($) *</label>
-                    <input type="number" id="price" step="0.01" min="0" name="price" placeholder="0.00" required>
-                </div>
-
-                <div class="form-field">
-                    <label for="stock">Stock quantity *</label>
-                    <input type="number" id="stock" min="0" name="stock" placeholder="0" required>
-                </div>
-
-                <div class="form-field wide">
-                    <label for="image_url">Cover image URL</label>
-                    <input type="url" id="image_url" name="image_url" placeholder="https://example.com/cover.jpg">
-                </div>
-
-                <div class="form-field wide">
-                    <label for="description">Description</label>
-                    <textarea id="description" name="description" placeholder="Short summary of the book…"></textarea>
-                </div>
-            </div>
+        <form method="POST" action="{{ url_for('admin.add_book') }}" novalidate>
+            {% include 'partials/admin_book_fields.html' %}
 
             <div class="form-actions">
                 <button class="btn" type="submit">Add book</button>

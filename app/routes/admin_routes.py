@@ -5,8 +5,35 @@ from app.models.admin import Admin
 from app.models.book import Book
 from app.models.catalogue import Catalogue
 from app.models.database import Database
+from app.validation import validate_admin_login, validate_book
 
 admin_bp = Blueprint("admin", __name__, url_prefix="/admin")
+
+
+def _book_form_from_request():
+    return {
+        "title": (request.form.get("title") or "").strip(),
+        "author": (request.form.get("author") or "").strip(),
+        "isbn": (request.form.get("isbn") or "").strip(),
+        "genre": (request.form.get("genre") or "").strip(),
+        "price": (request.form.get("price") or "").strip(),
+        "stock": (request.form.get("stock") or "").strip(),
+        "image_url": (request.form.get("image_url") or "").strip(),
+        "description": (request.form.get("description") or "").strip(),
+    }
+
+
+def _book_from_form(form):
+    return Book(
+        title=form["title"],
+        author=form["author"],
+        isbn=form["isbn"],
+        genre=form["genre"],
+        price=float(form["price"]),
+        stock=int(form["stock"]),
+        image_url=form["image_url"],
+        description=form["description"],
+    )
 
 
 def _get_book_by_id(book_id):
@@ -21,14 +48,21 @@ def _get_book_by_id(book_id):
 @admin_bp.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
-        username = request.form.get("username")
-        password = request.form.get("password")
+        username = request.form.get("username", "")
+        password = request.form.get("password", "")
+        form = {"username": username.strip()}
 
-        if Admin.login(username, password):
+        errors = validate_admin_login(username, password)
+        if errors:
+            return render_template("admin/login.html", errors=errors, form=form), 400
+
+        if Admin.login(form["username"], password):
             session["admin_logged_in"] = True
             return redirect(url_for("admin.dashboard"))
 
-        flash("Invalid username or password")
+        flash("Invalid username or password", "error")
+        errors = {"password": "Invalid username or password."}
+        return render_template("admin/login.html", errors=errors, form=form), 401
 
     return render_template("admin/login.html")
 
@@ -66,24 +100,19 @@ def add_book():
         return redirect(url_for("admin.login"))
 
     if request.method == "POST":
-        isbn = (request.form.get("isbn") or "").strip()
+        form = _book_form_from_request()
+        errors = validate_book(**form)
         db = Database.get_db()
 
-        if db.books.find_one({"isbn": isbn}):
-            flash("A book with this ISBN already exists.", "error")
-            return render_template("admin/add_book.html"), 400
+        if not errors and db.books.find_one({"isbn": form["isbn"]}):
+            errors["isbn"] = "A book with this ISBN already exists."
 
-        book = Book(
-            title=request.form.get("title", "").strip(),
-            author=request.form.get("author", "").strip(),
-            isbn=isbn,
-            genre=request.form.get("genre", "").strip(),
-            price=float(request.form.get("price") or 0),
-            stock=int(request.form.get("stock") or 0),
-            image_url=request.form.get("image_url", "").strip(),
-            description=request.form.get("description", "").strip(),
-        )
-        db.books.insert_one(book.to_dict())
+        if errors:
+            return render_template(
+                "admin/add_book.html", form=form, errors=errors
+            ), 400
+
+        db.books.insert_one(_book_from_form(form).to_dict())
         flash("Book added to catalogue.", "success")
         return redirect(url_for("admin.catalogue"))
 
@@ -101,24 +130,26 @@ def edit_book(book_id):
         return redirect(url_for("admin.catalogue"))
 
     if request.method == "POST":
-        isbn = (request.form.get("isbn") or "").strip()
+        form = _book_form_from_request()
+        errors = validate_book(**form)
         db = Database.get_db()
-        duplicate = db.books.find_one({"isbn": isbn, "_id": {"$ne": ObjectId(book_id)}})
-        if duplicate:
-            flash("Another book already uses this ISBN.", "error")
-            return render_template("admin/edit_book.html", book=book), 400
 
-        updated = Book(
-            title=request.form.get("title", "").strip(),
-            author=request.form.get("author", "").strip(),
-            isbn=isbn,
-            genre=request.form.get("genre", "").strip(),
-            price=float(request.form.get("price") or 0),
-            stock=int(request.form.get("stock") or 0),
-            image_url=request.form.get("image_url", "").strip(),
-            description=request.form.get("description", "").strip(),
+        if not errors:
+            duplicate = db.books.find_one(
+                {"isbn": form["isbn"], "_id": {"$ne": ObjectId(book_id)}}
+            )
+            if duplicate:
+                errors["isbn"] = "Another book already uses this ISBN."
+
+        if errors:
+            return render_template(
+                "admin/edit_book.html", book=book, form=form, errors=errors
+            ), 400
+
+        db.books.update_one(
+            {"_id": ObjectId(book_id)},
+            {"$set": _book_from_form(form).to_dict()},
         )
-        db.books.update_one({"_id": ObjectId(book_id)}, {"$set": updated.to_dict()})
         flash("Book updated.", "success")
         return redirect(url_for("admin.catalogue"))
 

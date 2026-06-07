@@ -531,6 +531,22 @@ h1, h2, h3, h4 {
     line-height: 1.5;
 }
 
+.form-grid .form-field input.input-invalid,
+.form-grid .form-field textarea.input-invalid {
+    border-color: var(--clr-error);
+}
+
+.form-grid .form-field .field-error {
+    display: block;
+    margin-top: 6px;
+    font-size: 0.85rem;
+    color: var(--clr-error);
+}
+
+.form-grid .form-field .field-error[hidden] {
+    display: none;
+}
+
 .form-actions {
     display: flex;
     flex-wrap: wrap;
